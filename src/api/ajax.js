@@ -6,7 +6,6 @@
   3).统一处理请求异常, 外部调用者不用再处理请求异常 === > 响应拦截器(使用失败回调)
 */
 import axios from "axios"
-import { promised } from "q";
 const qs = require('qs')
 
 /* 使用请求拦截器 */
