@@ -51,7 +51,7 @@
     6). 新的同事: 克隆仓库
         git clone url
         git checkout -b dev origin/dev
-        git pull origin dev
+        git push origin dev
     7). 如果远程修改了
         git pull origin dev
     8). 如何得到后面新增的远程分支
@@ -80,12 +80,16 @@
 ## 8. 引入路由
     下载包: react-router-dom
     拆分应用路由:
-      Login: 登陆
-      Admin: 后台管理界面
+        Login: 登陆
+        Admin: 后台管理界面
     注册路由:
-      <BrowserRouter> / <HashRouter>
-      <Switch>
-      <Route path='' component={}/>
+        <BrowserRouter> / <HashRouter>
+        <Switch>
+        <Route path='' component={}/>
+    路由匹配
+        逐级路由匹配: 先匹配上一个1级路由==> 进入这个路由的组件==> 匹配其内部1个子路由
+        只要匹配上一个, 后面的不看了
+        默认是模糊(只匹配前面部分)
       
 ## 9. Login的静态组件
     1). 自定义了一部分样式布局
@@ -98,15 +102,14 @@
 ## 10. 高阶函数与高阶组件
     1). 高阶函数
         定义: 接收的参数是函数或者返回值是函数
-        常见的: 数组遍历相关的方法 / 定时器 / Promise / 高阶组件 / fn.bind(obj)()
+        常见的: 数组遍历相关的方法 / 定时器 / bind() / Promise / Form.create()(组件)
         作用: 实现一个更加强大, 动态的功能
-
     2). 高阶组件: 
         本质是一个函数
         函数接收一个组件, 返回一个新的组件
         常见的高阶组件:
-            Form.create()返回的就是一个高阶组件 
-            connect()返回的就是一个高阶组件   
+            Form.create()返回的就是一个高阶组件 :  Form.create()(组件) 返回一个新的组件
+            connect()返回的就是一个高阶组件: connect()(UI组件)返回容器组件
     
     3). 高阶组件与高阶函数的关系
         高阶组件是特别的高阶函数
