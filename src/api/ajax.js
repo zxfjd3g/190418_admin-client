@@ -6,7 +6,8 @@
   3).统一处理请求异常, 外部调用者不用再处理请求异常 === > 响应拦截器(使用失败回调)
 */
 import axios from "axios"
-const qs = require('qs')
+import qs from 'qs'
+import { message } from 'antd'
 
 /* 使用请求拦截器 */
 axios.interceptors.request.use(config => {
@@ -25,7 +26,7 @@ axios.interceptors.response.use(
   },
   // 3). 统一处理请求异常, 外部调用者不用再处理请求异常
   error => { // ajax请求异常
-    alert('请求失败: ' + error.message)
+    message.error('请求失败: ' + error.message)
     // 返回一个pending状态的promise ==> 中断promise链
     return new Promise(() => {})
   }
