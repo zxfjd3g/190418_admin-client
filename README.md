@@ -159,7 +159,7 @@
         接口请求函数: 调用ajax模块发请求, 返回值promise对象
 
     3). 解决ajax跨域请求问题(开发时)
-        办法: 配置代理  ==> 开发的配置不能用于生产环境
+        办法: 配置代理  ==> 开发的配置不能用于生产环境   webpack-dev-server  ==> http-proxy-middleware
         编码: package.json: proxy: "http://localhost:5000"
 
     4). 对代理的理解

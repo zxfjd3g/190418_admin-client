@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import { Form, Icon, Input, Button, message } from 'antd'
 
+import { saveUser } from '../../utils/storageUtils'
 import { reqLogin } from '../../api'
 import './login.less'
 import logo from './images/logo.png'
+import memoryUtils from '../../utils/memoryUtils'
 
 const Item = Form.Item
 /* 
@@ -30,6 +33,11 @@ class Login extends Component {
           // 得到user
           const user = result.data
           // 保存user
+          // 保存到local
+          // localStorage.setItem('user_key', JSON.stringify(user))
+          saveUser(user)
+          // 保存到内存
+          memoryUtils.user = user
 
           // 跳转到admin  location/match/history
           this.props.history.replace('/')
@@ -63,6 +71,11 @@ class Login extends Component {
   }
 // alt + shift + R
   render() {
+    // 如果当前用户已经登陆, 自动跳转到admin
+    if (memoryUtils.user._id) {
+      return <Redirect to="/"></Redirect>
+    }
+
     const getFieldDecorator = this.props.form.getFieldDecorator
 
     return (
