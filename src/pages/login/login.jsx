@@ -14,14 +14,41 @@ class Login extends Component {
     // 阻止事件默认行为(提交表单)
     e.preventDefault()
 
-    const values = this.props.form.getFieldsValue()
-    const username = this.props.form.getFieldValue('username')
-    const pwd = this.props.form.getFieldValue('pwd')
-    console.log(values, username, pwd)
+    // const values = this.props.form.getFieldsValue()
+    // const username = this.props.form.getFieldValue('username')
+    // const pwd = this.props.form.getFieldValue('pwd')
+    // console.log(values, username, pwd)
 
-    alert('发送登陆的ajax请求')
+    // 进行表单的统一校验
+    this.props.form.validateFields((err, values) => {
+      if (!err) { // 校验成功
+        alert('校验成功, 发送登陆的ajax请求')
+      }
+    })
   }
 
+  /* 
+  自定义验证校验密码
+      1). 必须输入
+      2). 必须大于等于4位
+      3). 必须小于等于12位
+      4). 必须是英文、数字或下划线组成
+  */
+  validatePwd = (rule,value, callback) => {
+    value = value.trim()
+    if (!value) {
+      callback('密码必须输入')
+    } else if (value.length<4) {
+      callback('密码不能小于4位')
+    } else if (value.length > 12) {
+      callback('密码不能大于12位')
+    } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      callback('密码必须是英文、数字或下划线组成')
+    } else {
+      callback() // 通过校验
+    }
+  }
+// alt + shift + R
   render() {
     const getFieldDecorator = this.props.form.getFieldDecorator
 
@@ -35,10 +62,25 @@ class Login extends Component {
           <h1>用户登陆</h1>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Item>
-
+              {
+              /*
+              用户名/密码的的合法性要求
+                1). 必须输入
+                2). 必须大于等于4位
+                3). 必须小于等于12位
+                4). 必须是英文、数字或下划线组成
+              */
+                /* 声明式验证: 使用库写好的规则进行验证 */
+              }
               {
                 getFieldDecorator('username', { //配置对象: 属性名是一些特定名称   options
-                  // rules: [{ required: true, message: 'Please input your username!' }],
+                  initialValue: 'admin', // 初始值
+                  rules: [
+                    { required: true, whitespace: true, message: '用户名必须输入!' },
+                    { min: 4, message: '用户名不能小于4位!' },
+                    { max: 12, message: '用户名不能大于12位!' },
+                    { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成!' },
+                  ],
                 })(
                   <Input
                     prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -51,7 +93,10 @@ class Login extends Component {
             <Form.Item>
               {
                 getFieldDecorator('pwd', {
-
+                  initialValue: '',
+                  rules: [ // 自定义验证
+                    { validator: this.validatePwd}
+                  ]
                 })(
                   <Input
                     prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -92,19 +137,10 @@ class WrappedLoginForm extends Component {
   }
 }
 */
-
-class A extends Component {
-
-  render () {
-
-    return <div><B></B></div>
-  }
-}
-
-class B extends Component {
-
-  render() {
-
-    return <div>B</div>
-  }
-}
+/*
+用户名/密码的的合法性要求
+  1). 必须输入
+  2). 必须大于等于4位
+  3). 必须小于等于12位
+  4). 必须是英文、数字或下划线组成
+ */
