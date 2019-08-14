@@ -34,7 +34,6 @@ class LeftNav extends Component {
     } else {
 
       // 当前item的children中某个item的key与当前请求的path相同, 当前item的key就是openKey
-      debugger
       const cItem = item.children.find(cItem => cItem.key===path)
       if (cItem) {
         // 保存openKey
@@ -95,8 +94,6 @@ class LeftNav extends Component {
           </SubMenu>
         )
       }
-      
-      return 1
     })
   }
 

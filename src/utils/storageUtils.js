@@ -15,3 +15,8 @@ export const saveUser = (user) => store.set(USER_KEY, user)
 */
 // export const getUser = () => JSON.parse(localStorage.getItem('user_key') || '{}')
 export const getUser = () => store.get(USER_KEY) || {}
+
+/* 
+删除user
+*/
+export const removeUser = () => store.remove(USER_KEY)

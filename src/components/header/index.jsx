@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import { Modal } from 'antd'
 
+import LinkButton from '../link-button'
+import { removeUser } from '../../utils/storageUtils'
 import memoryUtils from '../../utils/memoryUtils'
 import menuConfig from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
@@ -21,7 +24,7 @@ class Header extends Component {
 
   updateTime = () => {
     // 启动循环定时器, 每隔1s更新一下时间状态
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       const currentTime = formateDate(Date.now())
       this.setState({
         currentTime
@@ -35,15 +38,6 @@ class Header extends Component {
       dayPictureUrl,
       weather
     })
-  }
-
-  /* 
-  异步获取天气信息显示
-  */
-
-  componentDidMount () {
-    this.updateTime()
-    this.getWeather()
   }
 
   /* 
@@ -66,6 +60,34 @@ class Header extends Component {
     return title
   }
 
+  logout = () => {
+    Modal.confirm({ // 配置对象
+      title: '确认退出吗?',
+      onOk: () => {
+        // 删除保存的user数据
+        removeUser()
+        memoryUtils.user = {}
+        // 跳转到login
+        this.props.history.replace('/login')
+      },
+      onCancel() {
+        console.log('Cancel')
+      },
+    })
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.intervalId)
+  }
+
+  /* 
+  异步获取天气信息显示
+  */
+  componentDidMount() {
+    this.updateTime()
+    this.getWeather()
+  }
+
   render() {
     const { currentTime, dayPictureUrl, weather } = this.state
     const user = memoryUtils.user
@@ -76,7 +98,9 @@ class Header extends Component {
       <div className="header">
         <div className="header-top">
           <span>欢迎, {user.username} </span>
-          <a href="javascript:">退出</a>
+          <LinkButton onClick={this.logout}>
+            退出
+          </LinkButton>
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">{ title }</div>
