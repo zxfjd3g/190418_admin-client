@@ -18,6 +18,7 @@ class LeftNav extends Component {
     reduce() + 递归
   */
  getMenuNodes2 = (menuList) => {
+   const path = this.props.location.pathname
    // [1, 2, 5, 10].reduce((pre, item) => pre + (item%2===0 ? item : 0), 0)
    return menuList.reduce((pre, item) => {
     // 向pre中添加<Item>
@@ -31,6 +32,15 @@ class LeftNav extends Component {
         </Item>
       )
     } else {
+
+      // 当前item的children中某个item的key与当前请求的path相同, 当前item的key就是openKey
+      debugger
+      const cItem = item.children.find(cItem => cItem.key===path)
+      if (cItem) {
+        // 保存openKey
+        this.openKey = item.key
+      }
+
       pre.push(
         <SubMenu
           key={item.key}
@@ -90,11 +100,30 @@ class LeftNav extends Component {
     })
   }
 
+  /* 
+  在第一次render()之前执行
+    1). 同步操作
+    2). 第一次render()就需要
+  */
+  componentWillMount () {
+    this.menuNodes = this.getMenuNodes2(menuList)
+  }
+
+  /* 
+  在第一次render()之后执行
+    1). 异步操作(ajax请求, 启动定时器..)
+    2). 第一次render()不用
+  */
+  componentDidMount () {
+
+  }
+
 
   render() {
     // 得到请求的路由路径
     const path = this.props.location.pathname
-    console.log('path', path) 
+   
+    console.log('path', path, this.openKey) 
 
     return (
       <div className="left-nav">
@@ -108,9 +137,10 @@ class LeftNav extends Component {
           mode="inline"
           /* defaultSelectedKeys={[path]} */ /* 只有第一次指定的有效 */
           selectedKeys={[path]}
+          defaultOpenKeys={[this.openKey]}
         >
           {
-            this.getMenuNodes2(menuList)
+            this.menuNodes
           }
         </Menu>
       </div>
