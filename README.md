@@ -247,7 +247,7 @@
         清除保存的user
         跳转到login
     7). 抽取通用的类链接按钮组件
-        通过...透传所有接收的属性: <Button {...props} />    <LinkButton>xxxx</LinkButton>
+        通过...透传所有接收的属性: <Button {...props} />
         组件标签的所有子节点都会成为组件的children属性
         
 ## 3. jsonp解决ajax跨域的原理
