@@ -2,7 +2,7 @@
 应用根组件
 */
 import React, {Component} from 'react'
-import {HashRouter, BrowserRouter, Route, Switch} from 'react-router-dom'
+import { BrowserRouter, Route, Switch} from 'react-router-dom'
 import Admin from './pages/admin/admin.jsx'
 import Login from './pages/login/login.jsx'
 
