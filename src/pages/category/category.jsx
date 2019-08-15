@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Card, Button, Icon, Table, Modal } from 'antd'
+import { Card, Button, Icon, Table, Modal, message } from 'antd'
 
-import { reqCategorys } from '../../api'
+import { reqCategorys, reqAddCategory, reqUpdateCategory } from '../../api'
 import LinkButton from '../../components/link-button'
 import CategoryForm from './category-form'
 
@@ -68,20 +68,74 @@ export default class Category extends Component {
     更新分类
   */
   updateCateogory = () => {
+    this.form.validateFields(async (error, values) => {
+      if (!error) {
+        // 重置输入框的值(变为初始值)
+        this.form.resetFields()
+
+        // 隐藏添加界面
+        this.setState({
+          showStatus: 0
+        })
+
+        const categoryId = this.category._id
+        const categoryName = values.categoryName
+        const result = await reqUpdateCategory(categoryId, categoryName)
+        if (result.status===0) {
+          message.success('修改分类成功')
+          // 显示最新列表
+          this.getCategorys()
+        } else {
+          message.error('修改失败: ' + result.msg)
+        }
+      }
+    })
     
   }
 
   /* 
     添加分类
+    父组件想得到子组件的一个数据(form): 子组件向父组件通信 ==> 函数类型的props
   */
   addCategory = () => {
+    // 1. 进行表单验证
+    this.form.validateFields(async (error, values) => {
+      if (!error) { // 验证通过了
 
+        // 重置输入框的值(变为初始值)
+        this.form.resetFields()
+
+        // 隐藏添加界面
+        this.setState({
+          showStatus: 0
+        })
+
+        // 2. 收集数据
+        const categoryName = values.categoryName
+
+        // 3. 发请求添加
+        const result = await reqAddCategory(categoryName)
+        // 4. 根据请求结果做不同处理
+        if (result.status===0) {
+          message.success('添加分类成功')
+          // 显示最新列表
+          this.getCategorys()
+        } else {
+          message.error('添加失败: ' + result.msg)
+        }
+      }
+    })
+
+    
   }
 
   /* 
   隐藏对话框
   */
   handleCancel = () => {
+    // 重置输入数据
+    this.form.resetFields()
+    // 隐藏对话框
     this.setState({
       showStatus: 0
     })
@@ -107,6 +161,13 @@ export default class Category extends Component {
     this.setState({
       showStatus: 2
     })
+  }
+
+  /* 
+  接收form并保存的函数
+  */
+  setForm = (form) => {
+    this.form = form
   }
 
 
@@ -150,7 +211,7 @@ export default class Category extends Component {
           onOk={this.updateCateogory}
           onCancel={this.handleCancel}
         >
-          <CategoryForm categoryName={category.name}/>
+          <CategoryForm categoryName={category.name} setForm={this.setForm}/>
         </Modal>
 
         <Modal
@@ -159,7 +220,7 @@ export default class Category extends Component {
           onOk={this.addCategory}
           onCancel={this.handleCancel}
         >
-          <CategoryForm/>
+          <CategoryForm setForm={this.setForm}/>
         </Modal>
       </Card>
     )

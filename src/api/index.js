@@ -57,3 +57,16 @@ export const reqCategorys = () => ajax.get('/manage/category/list')
 //   url: '/manage/category/list'
 // })
 // export const reqCategorys = () => ajax('/manage/category/list')
+
+
+/* 
+添加分类
+*/
+export const reqAddCategory = (categoryName) => ajax.post('/manage/category/add', {categoryName})
+
+/* 
+修改分类
+*/
+export const reqUpdateCategory = (categoryId, categoryName) => ajax.post('/manage/category/update', {
+  categoryId, categoryName
+})
