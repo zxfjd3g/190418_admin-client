@@ -70,3 +70,14 @@ export const reqAddCategory = (categoryName) => ajax.post('/manage/category/add'
 export const reqUpdateCategory = (categoryId, categoryName) => ajax.post('/manage/category/update', {
   categoryId, categoryName
 })
+
+/* 
+获取商品分页列表
+*/
+export const reqProducts = (pageNum, pageSize) => ajax.get('/manage/product/list', {
+  params: { // 值是对象, 对象中包含的是query参数数据
+    pageNum,
+    pageSize
+  }
+})
+// ajax({ url: '/manage/product/list', params: {pageNum, pageSize}})

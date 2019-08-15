@@ -268,9 +268,10 @@
     Table
     Button
     Icon
+    Modal
         
 ## 2. 相关接口请求函数
-    获取分类列表
+    获取全部分类列表
     添加分类
     更新分类
         
@@ -281,7 +282,7 @@
 
 ## 4. 添加分类
     1). 界面
-        antd组件: Modal, Form, Select, Input
+        antd组件: Modal, Form, Input
         显示/隐藏: showStatus状态为1/0
         
     2). 功能
