@@ -261,3 +261,81 @@
             接收到请求处理产生结果数据后, 返回一个函数调用的js代码, 并将结果数据作为实参传入函数调用
         浏览器端:
             收到响应自动执行函数调用的js代码, 也就执行了提前定义好的回调函数, 并得到了需要的结果数据
+
+# day04
+## 1. Category组件使用antd组件构建分类列表界面
+    Card
+    Table
+    Button
+    Icon
+        
+## 2. 相关接口请求函数
+    获取分类列表
+    添加分类
+    更新分类
+        
+## 3. 异步显示分类列表    
+    设计分类列表的状态: categorys
+    异步获取分类列表: componentDidMount(){}
+    更新状态显示
+
+## 4. 添加分类
+    1). 界面
+        antd组件: Modal, Form, Select, Input
+        显示/隐藏: showStatus状态为1/0
+        
+    2). 功能
+        父组(Category)件得到子组件(CategoryForm)的数据(form)
+        调用添加分类的接口
+        重新获取分类列表
+
+## 5. 更新分类
+    1). 界面
+        antd组件: Modal, Form, Input
+        显示/隐藏: showStatus状态为2/0
+        
+    2). 功能
+        父组(Category)件得到子组件(CategoryForm)的数据(form)
+        调用更新分类的接口
+        重新获取分类列表
+    3). 重要问题
+        描述: <Input>指定initialValue后, 如果输入改变了, 再指定新的initialValue, 默认显示输入的值
+        解决: 在关闭Modal时, 进行表单项重置: form.resetFields()
+
+
+## 6. Product整体路由
+    1). 配置子路由: 
+        ProductHome / ProductDetail / ProductAddUpdate
+        <Route> / <Switch> / <Redirect>
+    
+    2). 匹配路由的逻辑:
+        默认: 逐层路由不完全匹配   <Route path='/product' component={ProductHome}/>
+        exact属性: 完全匹配
+        
+## 7. 分页实现技术(2种)
+    1). 前台分页
+        请求获取数据: 一次获取所有数据, 翻页时不需要再发请求
+        请求接口: 
+            不需要指定请求参数: 页码(pageNum)和每页数量(pageSize)
+            响应数据: 所有数据的数组
+    
+    2). 基于后台的分页
+        请求获取数据: 每次只获取当前页的数据, 翻页时要发请求
+        请求接口: 
+            需要指定请求参数: 页码(pageNum)和每页数量(pageSize)
+            响应数据: 当前页数据的数组 + 总记录数(total)
+    
+    3). 如何选择?
+        基本根据数据多少来选择
+        
+## 8. ProductHome组件
+    1). 分页显示
+       界面: <Card> / <Table> / Select / Icon / Input / Button
+       状态: products / total
+       接口请求函数需要的数据: pageNum, pageSize
+       异步获取第一页数据显示
+           调用分页的接口请求函数, 获取到当前页的products和总记录数total
+           更新状态: products / total
+       翻页:
+           绑定翻页的监听, 监听回调需要得到pageNum
+           异步获取指定页码的数据显示 
