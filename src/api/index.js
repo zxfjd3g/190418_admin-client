@@ -47,3 +47,13 @@ export const reqWeather = (city) => {
   })
   
 }
+
+/* 
+获取所有商品分类的列表
+*/
+export const reqCategorys = () => ajax.get('/manage/category/list')
+// export const reqCategorys = () => ajax({
+//   method: 'GET',
+//   url: '/manage/category/list'
+// })
+// export const reqCategorys = () => ajax('/manage/category/list')
