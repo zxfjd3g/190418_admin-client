@@ -340,3 +340,58 @@
        翻页:
            绑定翻页的监听, 监听回调需要得到pageNum
            异步获取指定页码的数据显示 
+
+# day05
+## 1. ProductHome组件
+    2). 搜索分页
+       接口请求函数需要的数据: 
+           pageSize: 每页的条目数
+           pageNum: 当前请求第几页 (从1开始)
+           productDesc / productName: searchName 根据商品描述/名称搜索
+       状态:  searchType / searchName  / 在用户操作时实时收集数据
+       异步搜索显示分页列表
+           如果searchName有值, 调用搜索的接口请求函数获取数据并更新状态
+           
+    3). 更新商品的状态
+       初始显示: 根据product的status属性来显示  status = 1/2
+       点击切换:
+           绑定点击监听
+           异步请求更新状态
+    
+    4). 进入详情界面
+        memoryUtils.product = product
+        history.push('/product/detail')
+    5). 进入添加界面
+        memoryUtils.product = null
+        history.push('/product/addupdate')
+    6). 进入修改界面
+        memoryUtils.product = product
+        history.push('/product/addupdate')
+
+## 2. ProductDetail组件
+    1). 读取商品数据: memoryUtils.product
+    2). 显示商品信息: <Card> / List 
+    3). 异步显示商品所属分类的名称
+
+## 3. ProductAddUpdate
+    1). 基本界面
+        Card / Form / Input / TextArea / Button
+        FormItem的label标题和layout
+    2). 分类下拉列表的异步显示
+    3). 表单数据收集与表单验证
+    
+## 4. PicturesWall
+    1). antd组件
+        Upload / Modal / Icon
+        根据示例DEMO改造编写
+    2). 上传图片
+        在<Upload >上配置接口的path和请求参数名
+        监视文件状态的改变: 上传中 / 上传完成/ 删除
+        在上传成功时, 保存好相关信息: name / url
+        为父组件提供获取已上传图片文件名数组的方法
+    3). 删除图片
+        当文件状态变为删除时, 调用删除图片的接口删除上传到后台的图片
+    4). 父组件调用子组件对象的方法: 使用ref技术
+        a. 创建ref容器: thi.pw = React.createRef()
+        b. 将ref容器交给需要获取的标签元素: <PicturesWall ref={this.pw} />  
+        c. 通过ref容器读取标签元素: this.pw.current
