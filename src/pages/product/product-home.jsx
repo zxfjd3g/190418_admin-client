@@ -79,12 +79,16 @@ export default class ProductHome extends Component {
             <LinkButton 
               onClick={() => {
                 memoryUtils.product = product // 将product保存到内存
-                this.props.history.push(`/product/detail/${product._id}`, product)
+                this.props.history.push(`/product/detail/${product._id}`)
               }}
             >
               详情
             </LinkButton>
-            <LinkButton>修改</LinkButton>
+            <LinkButton
+              onClick={() => {
+                this.props.history.push(`/product/addupdate`, product)
+              }}
+            >修改</LinkButton>
           </span>
         )
       }
