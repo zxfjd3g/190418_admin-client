@@ -131,3 +131,8 @@ export const reqProduct = (productId) => ajax.get('/manage/product/info', {
     productId
   }
 })
+
+/* 
+删除图片
+*/
+export const reqDeleteImg = (name) => ajax.post('/manage/img/delete', {name})

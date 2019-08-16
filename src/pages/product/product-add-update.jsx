@@ -25,6 +25,12 @@ class ProductAddUpdate extends Component {
     categorys: []
   }
 
+  constructor (props) {
+    super(props)
+    // 创建一个ref容器
+    this.pwRef = React.createRef()
+  }
+
   /* 
   异步获取所有分类数组显示
   */
@@ -57,6 +63,10 @@ class ProductAddUpdate extends Component {
       if (!error) {
         const {name, desc, price, categoryId} = values
         console.log(name, desc, price, categoryId)
+
+        // 得到所有上传图片文件名的数组
+        const imgs = this.pwRef.current.getImgs()
+        console.log('imgs', imgs)
       }
     })
   }
@@ -150,7 +160,8 @@ class ProductAddUpdate extends Component {
             }
           </Item>
           <Item label="商品图片" wrapperCol={{ span: 15}}>
-            <PicturesWall/>
+            {/* 内部会将组件对象保存到ref容器对象: current: 组件对象 */}
+            <PicturesWall ref={this.pwRef} imgs={product.imgs}/>
           </Item>
 
           <Item>
