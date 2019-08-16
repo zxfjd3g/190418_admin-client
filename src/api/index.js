@@ -72,6 +72,16 @@ export const reqUpdateCategory = (categoryId, categoryName) => ajax.post('/manag
 })
 
 /* 
+根据分类ID获取分类
+*/
+export const reqCategory = (categoryId) => ajax('/manage/category/info', {
+  params: {
+    categoryId
+  }
+})
+
+
+/* 
 获取商品分页列表
 */
 export const reqProducts = (pageNum, pageSize) => ajax.get('/manage/product/list', {
@@ -110,5 +120,14 @@ export const reqUpdateProductStatus = (productId, status) => ajax({
   data: {
     productId,
     status
+  }
+})
+
+/* 
+根据商品ID获取商品
+*/
+export const reqProduct = (productId) => ajax.get('/manage/product/info', {
+  params: {
+    productId
   }
 })

@@ -5,6 +5,8 @@ import ProductHome from './product-home'
 import ProductDetail from './product-detail'
 import ProductAddUpdate from './product-add-update'
 
+import './product.less'
+
 /**
  * 商品管理
  */

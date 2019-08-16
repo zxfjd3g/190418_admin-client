@@ -16,6 +16,7 @@ import {
   reqUpdateProductStatus
 } from "../../api"
 import { PAGE_SIZE } from '../../utils/constants'
+import memoryUtils from '../../utils/memoryUtils';
 
 const Option = Select.Option
 
@@ -75,7 +76,14 @@ export default class ProductHome extends Component {
         width: 100,
         render: product => (
           <span>
-            <LinkButton>详情</LinkButton>
+            <LinkButton 
+              onClick={() => {
+                memoryUtils.product = product // 将product保存到内存
+                this.props.history.push(`/product/detail/${product._id}`, product)
+              }}
+            >
+              详情
+            </LinkButton>
             <LinkButton>修改</LinkButton>
           </span>
         )
