@@ -5,11 +5,16 @@ import {
   Input,
   Button,
   Icon,
-  Table
+  Table,
+  message
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
-import { reqProducts } from "../../api"
+import { 
+  reqProducts, 
+  reqSearchProducts,
+  reqUpdateProductStatus
+} from "../../api"
 import { PAGE_SIZE } from '../../utils/constants'
 
 const Option = Select.Option
@@ -22,6 +27,8 @@ export default class ProductHome extends Component {
   state = {
     products: [], // 当前页的product数组
     total: 0, // product的部数量
+    searchType: 'productName', // 搜索类型
+    searchName: '', // 搜索的关键字
   }
 
   initColumns = () => {
@@ -42,23 +49,24 @@ export default class ProductHome extends Component {
       {
         title: '状态',
         width: 100,
-        dataIndex: 'status',
-        render: status => {
-          if (status===1) {
-            return (
-              <span>
-                <Button type="primary">下架</Button>
-                <span>在售</span>
-              </span>
-            )
-          } else {
-            return (
-              <span>
-                <Button type="primary">上架</Button>
-                <span>已下架</span>
-              </span>
-            )
-          }
+        // dataIndex: 'status',
+        render: product => {
+          let btnText = '下架'
+          let text = '在售'
+          if (product.status===2) {
+            btnText = '上架'
+            text = '已下架'
+          } 
+
+          const status = product.status===1 ? 2 : 1
+          const productId = product._id
+
+          return (
+            <span>
+              <Button type="primary" onClick={() => this.updateStatus(productId, status)}>{btnText}</Button>
+              <span>{text}</span>
+            </span>
+          )
         }
       },
 
@@ -76,10 +84,31 @@ export default class ProductHome extends Component {
   }
 
   /* 
+  更新商品的状态
+  */
+  updateStatus = async (productId, status) => {
+    const result = await reqUpdateProductStatus(productId, status)
+    if (result.status===0) {
+      message.success('更新商品状态成功')
+      this.getProducts(this.pageNum)
+    }
+  }
+
+  /* 
   异步获取指定页码的商品列表显示
   */
   getProducts = async (pageNum) => {
-    const result = await reqProducts(pageNum, PAGE_SIZE)
+    // 保存当前页码
+    this.pageNum = pageNum
+
+    const {searchName, searchType} = this.state
+    let result
+    if (!searchName) {
+      result = await reqProducts(pageNum, PAGE_SIZE)
+    } else {
+      result = await reqSearchProducts({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
+    }
+
     if (result.status===0) {
       const {total, list} = result.data
       this.setState({
@@ -99,16 +128,26 @@ export default class ProductHome extends Component {
 
   render() {
     // 读取状态数据
-    const { products, total } = this.state
+    const { products, total, searchName, searchType } = this.state
     // Card的头部左侧
     const title = (
       <span>
-        <Select value="2" style={{ width: 200}}>
-          <Option value="1">按名称搜索</Option>
-          <Option value="2">按描述搜索</Option>
+        <Select 
+          value={searchType} 
+          style={{ width: 200 }} 
+          onChange={value => this.setState({ searchType: value })}
+        >
+          <Option value="productName">按名称搜索</Option>
+          <Option value="productDesc">按描述搜索</Option>
         </Select>
-        <Input type="text" style={{ width: 200, margin: '0 15px'}} placeholder="关键字"></Input>
-        <Button type="primary">搜索</Button>
+        <Input 
+          type="text" 
+          style={{ width: 200, margin: '0 15px' }} 
+          placeholder="关键字" 
+          value={searchName}
+          onChange={event => this.setState({ searchName: event.target.value })}
+        />
+        <Button type="primary" onClick={() => this.getProducts(1)}>搜索</Button>
       </span>
     )
 
@@ -128,6 +167,7 @@ export default class ProductHome extends Component {
           dataSource={products}
           columns={this.columns}
           pagination={{
+            current: this.pageNum,
             pageSize: PAGE_SIZE, 
             total,
             /* onChange: (page) => {this.getProducts(page)} */

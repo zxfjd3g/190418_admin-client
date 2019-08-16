@@ -81,3 +81,34 @@ export const reqProducts = (pageNum, pageSize) => ajax.get('/manage/product/list
   }
 })
 // ajax({ url: '/manage/product/list', params: {pageNum, pageSize}})
+
+
+/* 
+根据Name / desc搜索产品分页列表
+*/
+export const reqSearchProducts = ({
+    pageNum,
+    pageSize,
+    searchType, // 搜索的方式 'productDesc' 或者 'productName'
+    searchName
+  }) => ajax({
+  method: 'GET',
+  url: '/manage/product/search',
+  params: {
+    pageNum,
+    pageSize,
+    [searchType]: searchName
+  }
+})
+
+/* 
+对商品进行上架 / 下架处理
+*/
+export const reqUpdateProductStatus = (productId, status) => ajax({
+  method: 'POST',
+  url: '/manage/product/updateStatus',
+  data: {
+    productId,
+    status
+  }
+})
