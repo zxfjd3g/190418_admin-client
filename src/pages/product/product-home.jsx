@@ -161,7 +161,7 @@ export default class ProductHome extends Component {
 
     // Card的头部右侧
     const extra = (
-      <Button type="primary">
+      <Button type="primary" onClick={() => this.props.history.push('/product/addupdate')}>
         <Icon type="plus"></Icon>
         添加商品
       </Button>
