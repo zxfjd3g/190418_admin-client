@@ -8,6 +8,9 @@ import {
   Table,
   message
 } from 'antd'
+// import _ from 'lodash'
+import throttle from 'lodash.throttle'
+// import debounce from 'lodash.debounce'
 
 import LinkButton from '../../components/link-button'
 import { 
@@ -98,13 +101,15 @@ export default class ProductHome extends Component {
   /* 
   更新商品的状态
   */
-  updateStatus = async (productId, status) => {
+  // updateStatus = _.throttle(async (productId, status) => {
+  updateStatus = throttle(async (productId, status) => {
+    // console.log('-------')
     const result = await reqUpdateProductStatus(productId, status)
-    if (result.status===0) {
+    if (result.status === 0) {
       message.success('更新商品状态成功')
       this.getProducts(this.pageNum)
     }
-  }
+  }, 3000, { trailing: false }) // 快速多次点击, 最后一次不调用
 
   /* 
   异步获取指定页码的商品列表显示
@@ -115,10 +120,10 @@ export default class ProductHome extends Component {
 
     const {searchName, searchType} = this.state
     let result
-    if (!searchName) {
-      result = await reqProducts(pageNum, PAGE_SIZE)
-    } else {
+    if (searchName && this.isSearch) {
       result = await reqSearchProducts({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
+    } else {
+      result = await reqProducts(pageNum, PAGE_SIZE)
     }
 
     if (result.status===0) {
@@ -159,7 +164,10 @@ export default class ProductHome extends Component {
           value={searchName}
           onChange={event => this.setState({ searchName: event.target.value })}
         />
-        <Button type="primary" onClick={() => this.getProducts(1)}>搜索</Button>
+        <Button type="primary" onClick={() => {
+          this.isSearch = true
+          this.getProducts(1)
+        }}>搜索</Button>
       </span>
     )
 

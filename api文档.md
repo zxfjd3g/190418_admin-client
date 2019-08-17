@@ -152,7 +152,6 @@ username=admin&password=admin
 	        "email": "sd",
 	        "role_id": "5ca9eab0b49ef916541160d4",
 	        "create_time": 1555061581734,
-	        "__v": 0
 	      },
 	      {
 	        "_id": "5cb05b69b6ed8c44f42c9af3",
@@ -645,7 +644,6 @@ username=admin&password=admin
                 "_id": "5ca9eaa1b49ef916541160d3",
                 "name": "测试",
                 "create_time": 1554639521749,
-                "__v": 0,
                 "auth_time": 1558679920395,
                 "auth_name": "test007"
             },

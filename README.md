@@ -360,13 +360,11 @@
     
     4). 进入详情界面
         memoryUtils.product = product
-        history.push('/product/detail')
+        history.push('/product/detail/product._id')
     5). 进入添加界面
-        memoryUtils.product = null
         history.push('/product/addupdate')
     6). 进入修改界面
-        memoryUtils.product = product
-        history.push('/product/addupdate')
+        history.push('/product/addupdate', product)
 
 ## 2. ProductDetail组件
     1). 读取商品数据: memoryUtils.product
