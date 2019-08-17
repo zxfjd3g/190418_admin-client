@@ -24,23 +24,6 @@ export default class Auth extends Component {
     return this.state.checkedKeys
   }
 
-  /* 
-  第一次render前调用, 后面再打开显示时不会再调用
-  */
-  componentWillMount () {
-    const menus = this.props.role.menus
-    this.setState({ checkedKeys: menus })
-  }
-
-  /* 
-  组件将要接收到新的props
-  */
-  componentWillReceiveProps (nextProps) {
-    // 读取最新传入的role, 更新checkedKeys状态
-    const menus = nextProps.role.menus
-    this.setState({ checkedKeys: menus })
-  }
-
   getTreeNodes = (menuList) => {
     return menuList.map(item => {
       return (
@@ -58,6 +41,23 @@ export default class Auth extends Component {
     this.setState({
       checkedKeys
     })
+  }
+
+  /* 
+ 第一次render前调用, 后面再打开显示时不会再调用
+ */
+  componentWillMount() {
+    const menus = this.props.role.menus
+    this.setState({ checkedKeys: menus })
+  }
+
+  /* 
+  组件将要接收到新的props
+  */
+  componentWillReceiveProps(nextProps) {
+    // 读取最新传入的role, 更新checkedKeys状态
+    const menus = nextProps.role.menus
+    this.setState({ checkedKeys: menus })
   }
 
   render() {
