@@ -11,7 +11,8 @@ import { formateDate } from "../../utils/dateUtils"
 import LinkButton from '../../components/link-button'
 import AddForm from './add-form'
 import Auth from './auth'
-import { reqRoles, reqAddRole } from '../../api'
+import { reqRoles, reqAddRole, reqUpdateRole } from '../../api'
+import memoryUtils from '../../utils/memoryUtils';
 
 /**
  * 角色管理
@@ -21,6 +22,11 @@ export default class Role extends Component {
     roles: [],
     isShowAdd: false,
     isShowAuth: false,
+  }
+
+  constructor(props) {
+    super(props)
+    this.authRef = React.createRef()
   }
 
   initColumns = () => {
@@ -52,6 +58,7 @@ export default class Role extends Component {
   }
 
   showAuth = (role) => {
+    // 保存要设置权限的role
     this.role = role
     this.setState({
       isShowAuth: true
@@ -85,8 +92,22 @@ export default class Role extends Component {
     })
   }
 
-  updateRole = () => {
+  updateRole = async () => {
 
+    this.setState({
+      isShowAuth: false
+    })
+
+    const role = this.role
+    role.menus = this.authRef.current.getMenus()
+    role.auth_time = Date.now()
+    role.auth_name = memoryUtils.user.username
+
+    const result = await reqUpdateRole(role)
+    if (result.status===0) {
+      message.success('授权成功')
+      this.getRoles()
+    }
   }
 
   componentWillMount () {
@@ -131,7 +152,7 @@ export default class Role extends Component {
             this.setState({ isShowAuth: false })
           }}
         >
-          <Auth />
+          <Auth role={this.role} ref={this.authRef}/>
         </Modal>
       </Card>
     )

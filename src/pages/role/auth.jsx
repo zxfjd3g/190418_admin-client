@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
   Form,
   Input,
@@ -11,6 +12,35 @@ const { TreeNode } = Tree
 
 export default class Auth extends Component {
 
+  static propTypes = {
+    role: PropTypes.object
+  }
+
+  state = {
+    checkedKeys: []
+  }
+
+  getMenus = () => {
+    return this.state.checkedKeys
+  }
+
+  /* 
+  第一次render前调用, 后面再打开显示时不会再调用
+  */
+  componentWillMount () {
+    const menus = this.props.role.menus
+    this.setState({ checkedKeys: menus })
+  }
+
+  /* 
+  组件将要接收到新的props
+  */
+  componentWillReceiveProps (nextProps) {
+    // 读取最新传入的role, 更新checkedKeys状态
+    const menus = nextProps.role.menus
+    this.setState({ checkedKeys: menus })
+  }
+
   getTreeNodes = (menuList) => {
     return menuList.map(item => {
       return (
@@ -21,7 +51,18 @@ export default class Auth extends Component {
     })
   }
 
+  /* 
+  当用户改变某个treeNode的勾选状态时自动调用
+  */
+  handleCheck = (checkedKeys) => {
+    this.setState({
+      checkedKeys
+    })
+  }
+
   render() {
+    const {name} = this.props.role
+    const { checkedKeys } = this.state
 
     const formItemLayout = {
       labelCol: { span: 4 },
@@ -31,12 +72,14 @@ export default class Auth extends Component {
     return (
       <div>
         <Item label="角色名称:" {...formItemLayout}>
-          <Input value="test1" disabled></Input>
+          <Input disabled value={name}></Input>
         </Item>
 
         <Tree
           checkable
           defaultExpandAll
+          onCheck={this.handleCheck}
+          checkedKeys={checkedKeys}
         >
           <TreeNode title="平台权限" key="0-0">
             {
