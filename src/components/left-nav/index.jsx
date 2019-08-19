@@ -5,7 +5,6 @@ import {connect} from 'react-redux'
 
 import { setHeaderTitle } from '../../redux/actions'
 import menuList from '../../config/menuConfig'
-import memoryUtils from '../../utils/memoryUtils'
 import logo from '../../assets/images/logo.png'
 import './index.less'
 
@@ -21,7 +20,7 @@ class LeftNav extends Component {
     判断当前登陆用户是否有对item的权限
   */
   hasAuth = (item) => {
-    const user = memoryUtils.user
+    const user = this.props.user
     const menus = user.role.menus
     /* 
     1. 如果当前是admin
@@ -184,7 +183,9 @@ class LeftNav extends Component {
 
 // 新组件会向LeftNav组件传递3个属性: history/location/match
 export default connect(
-  state => ({}),
+  state => ({
+    user: state.user
+  }),
   {setHeaderTitle}
 )(withRouter(LeftNav))
 

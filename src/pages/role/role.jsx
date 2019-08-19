@@ -6,18 +6,18 @@ import {
   Modal,
   message
 } from 'antd'
+import {connect} from 'react-redux'
 
 import { formateDate } from "../../utils/dateUtils"
 import LinkButton from '../../components/link-button'
 import AddForm from './add-form'
 import Auth from './auth'
 import { reqRoles, reqAddRole, reqUpdateRole } from '../../api'
-import memoryUtils from '../../utils/memoryUtils';
 
 /**
  * 角色管理
  */
-export default class Role extends Component {
+class Role extends Component {
   state = {
     roles: [],
     isShowAdd: false,
@@ -101,7 +101,7 @@ export default class Role extends Component {
     const role = this.role
     role.menus = this.authRef.current.getMenus()
     role.auth_time = Date.now()
-    role.auth_name = memoryUtils.user.username
+    role.auth_name = this.props.user.username
 
     const result = await reqUpdateRole(role)
     if (result.status===0) {
@@ -158,3 +158,10 @@ export default class Role extends Component {
     )
   }
 }
+
+export default connect(
+  state => ({
+    user: state.user
+  }),
+  {}
+)(Role)

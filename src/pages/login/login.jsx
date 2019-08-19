@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Form, Icon, Input, Button, message } from 'antd'
+import { connect } from 'react-redux'
 
+import { login } from '../../redux/actions'
 import { saveUser } from '../../utils/storageUtils'
 import { reqLogin } from '../../api'
 import './login.less'
 import logo from '../../assets/images/logo.png'
-import memoryUtils from '../../utils/memoryUtils'
 
 const Item = Form.Item
 /* 
@@ -26,24 +27,7 @@ class Login extends Component {
     // 进行表单的统一校验
     this.props.form.validateFields(async (err, values) => {
       if (!err) { // 校验成功
-        // alert('校验成功, 发送登陆的ajax请求')
-        // try {} catch (error) {}
-        const result = await reqLogin(values)
-        if (result.status===0) { // 登陆请求成功
-          // 得到user
-          const user = result.data
-          // 保存user
-          // 保存到local
-          // localStorage.setItem('user_key', JSON.stringify(user))
-          saveUser(user)
-          // 保存到内存
-          memoryUtils.user = user
-
-          // 跳转到admin  location/match/history
-          this.props.history.replace('/')
-        } else { // 登陆请求失败
-          message.error(result.msg)
-        }
+        this.props.login(values.username, values.password)
       }
     })
   }
@@ -71,8 +55,9 @@ class Login extends Component {
   }
 // alt + shift + R
   render() {
+    const user = this.props.user
     // 如果当前用户已经登陆, 自动跳转到admin
-    if (memoryUtils.user._id) {
+    if (user._id) {
       return <Redirect to="/"></Redirect>
     }
 
@@ -85,6 +70,7 @@ class Login extends Component {
           <h1>后台管理系统</h1>
         </div>
         <div className="login-content">
+          <div style={{ color: 'red'}}>{user.msg}</div>
           <h1>用户登陆</h1>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Item>
@@ -147,7 +133,12 @@ class Login extends Component {
 
 const WrappedLoginForm = Form.create()(Login)   // 组件名: 'Form(Login)'
 
-export default WrappedLoginForm
+export default connect(
+  state => ({
+    user: state.user
+  }),
+  { login }
+)(WrappedLoginForm)
 
 /* 
 实例对象: 简称对象

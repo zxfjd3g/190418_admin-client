@@ -7,7 +7,8 @@ import { getUser } from '../utils/storageUtils'
 import {
   SET_HEADER_TITLE,
   RECEIVE_USER,
-  SHOW_MSG
+  SHOW_MSG,
+  RESET_USER
 } from './action-types'
 
 /* 
@@ -33,7 +34,8 @@ function user(state = initUser, action) {
       return action.data
     case SHOW_MSG:  // 在reducer中不要直接修改state数据, 而是要返回一个新的state数据
       return {...state, msg: action.data}
-    
+    case RESET_USER:
+      return {msg: '请重新登陆'}
     default:
       return state
   }

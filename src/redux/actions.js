@@ -6,9 +6,11 @@
 import {
   SET_HEADER_TITLE,
   RECEIVE_USER,
-  SHOW_MSG
+  SHOW_MSG,
+  RESET_USER
 } from './action-types'
 import { reqLogin } from '../api'
+import { saveUser, removeUser } from '../utils/storageUtils'
 
 /* 
 设置头部标题的同步action
@@ -36,10 +38,23 @@ export function login(username, password) {
     // 2. 根据结果分发同步action
     if (result.status===0) { // 登陆成功
       const user = result.data
+      // 将user保存到local
+      saveUser(user)
+      // 将user保存到状态中
       dispatch(receiveUser(user))
     } else { // 登陆失败
       const msg = result.msg
       dispatch(showMsg(msg))
     }
   }
+}
+
+/* 
+退出登陆的同步action
+*/
+export const logout = () => {
+  // 清除local中保存的user
+  removeUser()
+  // 重置状态中的user
+  return {type: RESET_USER}
 }
