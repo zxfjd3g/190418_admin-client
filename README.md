@@ -438,3 +438,93 @@
         b. 如果当前item是公开的
         c. 当前用户有此item的权限: key有没有menus中
         d. 如果当前用户有此item的某个子item的权限
+
+# day07
+## 1. 项目中引入redux
+    1). 下载相关的库
+        redux
+		react-redux
+		redux-thunk
+		redux-devtools-extension(这个只在开发时需要)
+    2). 创建redux文件夹
+        action-types.js
+		actions.js
+		reducers.js
+		store.js
+    3). store.js
+        默认暴露创建的store对象
+        指定好reducer
+        应用上thunk异步中间件
+        应用上redux调试插件
+
+    4). reducer.js
+        为头部标题定义reducer函数: headerTitle
+        为登陆的用户定义reducer函数: user
+        通过combineReducers()来整合多个子reducer, 生成一个总的reducer函数
+        总的state的结构: {headerTitle: 'xxx', user: {}}
+
+    5). action-types.js
+        同步action对象的type名称常量
+
+    6). actions.js
+        定义与type对应的同步action creator函数: 返回action对象
+        定义异步action creator函数: 返回action函数
+
+    7). 在需要与redux通信的组件中
+        引入connect函数
+        引入action creator函数
+        通过connect包装UI组件生成容器组件, 并暴露
+            export default connect(
+                state => ({}),
+                {}
+            )(UI组件)
+
+## 2. setState()的使用
+    1). setState(updater, [callback]),
+        updater为返回stateChange对象的函数: (state, props) => stateChange
+        接收的state和props被保证为最新的
+    2). setState(stateChange, [callback])
+        stateChange为对象,
+        callback是可选的回调函数, 在状态更新且界面更新后才执行
+    3). 总结:
+        对象方式是函数方式的简写方式
+            如果新状态不依赖于原状态 ===> 使用对象方式
+            如果新状态依赖于原状态 ===> 使用函数方式
+        如果需要在setState()后获取最新的状态数据, 在第二个callback函数中读取
+
+## 3. setState()的异步与同步
+    1). setState()更新状态是异步还是同步的?
+        a. 执行setState()的位置?
+            在react控制的回调函数中: 生命周期勾子 / react事件监听回调
+            非react控制的异步回调函数中: 定时器回调 / 原生事件监听回调 / promise回调 /...
+        b. 异步 OR 同步?
+            react相关回调中: 异步
+            其它异步回调中: 同步
+    
+    2). 关于异步的setState()
+        a. 多次调用, 如何处理?
+            setState({}): 合并更新一次状态, 只调用一次render()更新界面 ---状态更新和界面更新都合并了
+            setState(fn): 更新多次状态, 但只调用一次render()更新界面  ---状态更新没有合并, 但界面更新合并了
+        b. 如何得到异步更新后的状态数据?
+            在setState()的callback回调函数中
+
+## 4. Component与PureComponent
+    1). Component存在的问题?
+        a. 父组件重新render(), 当前组件也会重新执行render(), 即使没有任何变化
+        b. 当前组件setState(), 重新执行render(), 即使state没有任何变化
+  
+    2). 解决Component存在的问题
+        a. 原因: 组件的shouldcomponentUpdate()默认返回true, 即使数据没有变化render()都会重新执行
+        b. 办法1: 重写shouldComponentUpdate(), 判断如果数据有变化返回true, 否则返回false
+        c. 办法2: 使用PureComponent代替Component
+        d. 说明: 一般都使用PureComponent来优化组件性能
+  
+    3). PureComponent的基本原理
+        a. 重写实现shouldComponentUpdate()
+        b. 对组件的新/旧state和props中的数据进行浅比较, 如果都没有变化, 返回false, 否则返回true
+        c. 一旦componentShouldUpdate()返回false不再执行用于更新的render()
+  
+    4). 面试题:
+        组件的哪个生命周期勾子能实现组件优化?
+        PureComponent的原理?
+        区别Component与PureComponent?
