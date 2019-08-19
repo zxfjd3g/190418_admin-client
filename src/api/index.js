@@ -7,7 +7,7 @@ import { message } from 'antd'
 import ajax from './ajax'
 
 // const BASE = 'http://localhost:5000'
-const BASE = ''
+const BASE = process.env.NODE_ENV==='production' ? '/api' : '' 
 
 /* 
 1. 登陆
@@ -51,7 +51,7 @@ export const reqWeather = (city) => {
 /* 
 获取所有商品分类的列表
 */
-export const reqCategorys = () => ajax.get('/manage/category/list')
+export const reqCategorys = () => ajax.get(BASE + '/manage/category/list')
 // export const reqCategorys = () => ajax({
 //   method: 'GET',
 //   url: '/manage/category/list'
@@ -62,12 +62,14 @@ export const reqCategorys = () => ajax.get('/manage/category/list')
 /* 
 添加分类
 */
-export const reqAddCategory = (categoryName) => ajax.post('/manage/category/add', {categoryName})
+export const reqAddCategory = (categoryName) => ajax.post(BASE + '/manage/category/add', {
+  categoryName
+})
 
 /* 
 修改分类
 */
-export const reqUpdateCategory = (categoryId, categoryName) => ajax.post('/manage/category/update', {
+export const reqUpdateCategory = (categoryId, categoryName) => ajax.post(BASE + '/manage/category/update', {
   categoryId, categoryName
 })
 
