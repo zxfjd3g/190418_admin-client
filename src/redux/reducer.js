@@ -4,12 +4,20 @@
 import { combineReducers } from 'redux'
 import { getUser } from '../utils/storageUtils'
 
+import {
+  SET_HEADER_TITLE,
+  RECEIVE_USER,
+  SHOW_MSG
+} from './action-types'
+
 /* 
 管理头部标题的reducer函数
 */
 const initHeaderTitle = '首页'
 function headerTitle(state = initHeaderTitle, action) {
   switch (action.type) {
+    case SET_HEADER_TITLE:
+      return action.headerTitle
     default:
       return state
   }
@@ -21,6 +29,11 @@ function headerTitle(state = initHeaderTitle, action) {
 const initUser = getUser() // 从storage中读取出user作为初始值
 function user(state = initUser, action) {
   switch (action.type) {
+    case RECEIVE_USER:
+      return action.data
+    case SHOW_MSG:  // 在reducer中不要直接修改state数据, 而是要返回一个新的state数据
+      return {...state, msg: action.data}
+    
     default:
       return state
   }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Modal } from 'antd'
+import { connect } from 'react-redux'
 
 import LinkButton from '../link-button'
 import { removeUser } from '../../utils/storageUtils'
@@ -92,7 +93,8 @@ class Header extends Component {
     const { currentTime, dayPictureUrl, weather } = this.state
     const user = memoryUtils.user
     // 得到当前请求对应的标题
-    const title = this.getTitle()
+    // const title = this.getTitle()
+    const title = this.props.headerTitle
 
     return (
       <div className="header">
@@ -115,4 +117,16 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header)
+// export default withRouter(Header)
+export default connect(
+  state => ({// state就是总状态
+    headerTitle: state.headerTitle
+  }), // 指定一般属性
+  {} // 指定函数属性
+)(withRouter(Header))
+
+/* 
+容器组件的责任: 向UI组件传入特定的属性
+  一般属性: 读取redux的状态数据交给UI组件显示
+  函数属性: 包含dispatch()更新状态的函数交给UI组件调用
+*/

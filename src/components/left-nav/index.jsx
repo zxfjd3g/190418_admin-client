@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from "react-router-dom"
 import { Menu, Icon } from 'antd'
+import {connect} from 'react-redux'
 
+import { setHeaderTitle } from '../../redux/actions'
 import menuList from '../../config/menuConfig'
 import memoryUtils from '../../utils/memoryUtils'
 import logo from '../../assets/images/logo.png'
@@ -48,9 +50,14 @@ class LeftNav extends Component {
     if (this.hasAuth(item)) {
       // 向pre中添加<Item>
       if (!item.children) {
+        // 如果请求的路径与当前item的key一致, 将当前item的title更新到redux的状态
+        if (path.indexOf(item.key) === 0) {
+          this.props.setHeaderTitle(item.title)
+        }
+
         pre.push(
           <Item key={item.key}>
-            <Link to={item.key}>
+            <Link to={item.key} onClick={() => this.props.setHeaderTitle(item.title)}>
               <Icon type={item.icon} />
               <span>{item.title}</span>
             </Link>
@@ -176,4 +183,15 @@ class LeftNav extends Component {
 }
 
 // 新组件会向LeftNav组件传递3个属性: history/location/match
-export default withRouter(LeftNav)
+export default connect(
+  state => ({}),
+  {setHeaderTitle}
+)(withRouter(LeftNav))
+
+/* 
+function setHeaderTitle (...args) {  // [1, 2, 3]
+  dispatch(setHeaderTitle(...args))
+}
+
+setHeaderTitle(1, 2, 3)
+*/
