@@ -70,7 +70,7 @@ class Login extends Component {
           <h1>后台管理系统</h1>
         </div>
         <div className="login-content">
-          <div style={{ color: 'red'}}>{user.msg}</div>
+          <div className={user.msg ? 'error-msg show' : 'error-msg'}>{user.msg}</div>
           <h1>用户登陆</h1>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Item>
