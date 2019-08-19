@@ -26,11 +26,11 @@ class LeftNav extends Component {
     2. item是一个公开的
     3. item的key在当前用户对应的menus中
     */
-    if (user.username === 'admin' || item.isPublic || menus.indexOf(item.key)!=-1) {
+    if (user.username === 'admin' || item.isPublic || menus.indexOf(item.key)!==-1) {
       return true
     } else if (item.children) {
       // 4. 某个子item的key在menus中
-      const cItem = item.children.find(cItem => menus.indexOf(cItem.key) != -1)
+      const cItem = item.children.find(cItem => menus.indexOf(cItem.key) !== -1)
       return !!cItem
     }
     return false
