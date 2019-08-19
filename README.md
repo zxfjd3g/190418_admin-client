@@ -393,3 +393,48 @@
         a. 创建ref容器: thi.pw = React.createRef()
         b. 将ref容器交给需要获取的标签元素: <PicturesWall ref={this.pw} />  
         c. 通过ref容器读取标签元素: this.pw.current
+
+# day06
+## 1. RichTextEditor
+    1). 使用基于react的富文本编程器插件库: react-draft-wysiwyg
+    2). 参考库的DEMO和API文档编写
+    3). 如果还有不确定的, 百度搜索, 指定相对准确的关键字
+    
+## 2. 完成商品添加与修改功能
+    1). 收集输入数据
+        通过form收集: name/desc/price/pCategoryId/categoryId
+        通过ref收集: imgs/detail
+        如果是更新收集: _id
+        将收集数据封装成product对象
+    2). 更新商品
+        定义添加和更新的接口请求函数
+        调用接口请求函数, 如果成功并返回商品列表界面
+
+## 3. 角色管理
+    1). 角色前台分页显示
+    2). 添加角色
+    3). 给指定角色授权
+        界面: Tree
+        状态: checkedKeys, 根据传入的role的menus进行初始化
+        勾选某个Node时, 更新checkedKeys
+        点击OK时: 通过ref读取到子组件中的checkedKeys作为要更新role新的menus
+                发请求更新role
+        解决默认勾选不正常的bug: 利用组件的componentWillReceiveProps()
+
+## 4. 用户管理
+    1). 显示用户分页列表
+    2). 添加用户
+    3). 修改用户
+    4). 删除用户
+    
+## 5. 导航菜单权限控制
+    1). 基本思路(依赖于后台): 
+        角色: 包含所拥有权限的所有菜单项key的数组: menus=[key1, key2, key3]
+        用户: 包含所属角色的ID: role_id
+        当前登陆用户: user中已经包含了所属role对象
+        遍历显示菜单项时: 判断只有当有对应的权限才显示
+    2). 判断是否有权限的条件?
+        a. 如果当前用户是admin
+        b. 如果当前item是公开的
+        c. 当前用户有此item的权限: key有没有menus中
+        d. 如果当前用户有此item的某个子item的权限
