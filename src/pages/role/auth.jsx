@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import {
   Form,
@@ -10,7 +10,7 @@ import menuList from '../../config/menuConfig'
 const Item = Form.Item
 const { TreeNode } = Tree
 
-export default class Auth extends Component {
+export default class Auth extends PureComponent {
 
   static propTypes = {
     role: PropTypes.object
@@ -61,6 +61,8 @@ export default class Auth extends Component {
   }
 
   render() {
+    console.log('auth render()')
+
     const {name} = this.props.role
     const { checkedKeys } = this.state
 

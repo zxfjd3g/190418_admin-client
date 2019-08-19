@@ -47,9 +47,7 @@
     }
 
     test1 = () => {
-      this.setState({
-        // m1: {count: 2}
-      })
+      this.setState({m1: {count: 1}})
     }
 
     render() {
@@ -72,22 +70,20 @@
     }
 
     test1 = () => {
-      /* this.setState({
-        m2: {count: 2}
-      }) */
-      var m2 = this.state.m2
+      const m2 = this.state.m2
       // m2.count = 3
-      this.setState(state => ({
-        m2: {...state.m2, count: 3}
-      }))
+      // this.setState({ m2: {count: 3}})
+      m2.count = m2.count + 3
+      this.setState(state => ({m2: {count: state.m2.count + 3}}))
+      
     }
 
     /* shouldComponentUpdate (nextProps, nextState) {
+      // 所有的数据都没变化, 返回false, 不进入更新流程
       if (nextProps.m1===this.props.m1 && nextState.m2===this.state.m2) {
-        return false // 不会进入更新流程
-      } else {
-        return true // 会进入更新流程
+        return false
       }
+      return true
     } */
 
     render() {
