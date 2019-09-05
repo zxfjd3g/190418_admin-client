@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 
 import LeftNav from '../../components/left-nav'
 import Header from '../../components/header'
-import memoryUtils from '../../utils/memoryUtils'
 
 import Home from '../home/home'
 import Category from '../category/category'

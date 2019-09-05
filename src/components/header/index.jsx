@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 
 import { logout } from '../../redux/actions'
 import LinkButton from '../link-button'
-import { removeUser } from '../../utils/storageUtils'
-import memoryUtils from '../../utils/memoryUtils'
 import menuConfig from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
 import {reqWeather} from '../../api'
