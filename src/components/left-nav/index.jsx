@@ -182,12 +182,12 @@ class LeftNav extends Component {
 }
 
 // 新组件会向LeftNav组件传递3个属性: history/location/match
-export default connect(
+export default withRouter(connect(
   state => ({
     user: state.user
   }),
   {setHeaderTitle}
-)(withRouter(LeftNav))
+)(LeftNav))
 
 /* 
 function setHeaderTitle (...args) {  // [1, 2, 3]

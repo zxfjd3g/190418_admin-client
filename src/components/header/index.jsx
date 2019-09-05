@@ -115,13 +115,13 @@ class Header extends Component {
 }
 
 // export default withRouter(Header)
-export default connect(
+export default withRouter(connect(
   state => ({// state就是总状态
     headerTitle: state.headerTitle,
     user: state.user
   }), // 指定一般属性
   { logout } // 指定函数属性
-)(withRouter(Header))
+)(Header))
 
 /* 
 容器组件的责任: 向UI组件传入特定的属性
